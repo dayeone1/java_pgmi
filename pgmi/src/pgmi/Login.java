@@ -10,6 +10,7 @@ public class Login extends JPanel {
     private JPasswordField passwordField; // 비밀번호 필드
     private Database db; // Database 객체
     private JButton joinButton; // 회원가입 버튼
+    private ActionListener loginSuccessListener; // 로그인 성공 리스너
 
     public Login() {
         db = new Database(); // Database 객체 생성
@@ -29,7 +30,12 @@ public class Login extends JPanel {
         passwordField.setBounds(52, 314, 250, 40);
 
         // 로그인 버튼
-        JButton loginButton = new JButton("로그인");
+        ImageIcon button_img_0 = new ImageIcon("C:\\dy\\Img\\login_img/button_0.png");
+        ImageIcon button_img_1 = new ImageIcon("C:\\dy\\Img\\login_img/button_1.png");
+        
+        JButton loginButton = new JButton(button_img_0);
+        loginButton.setRolloverIcon(button_img_1); // 버튼에 마우스가 올라갈 때 이미지 변환
+        loginButton.setBorderPainted(false); // 버튼 테두리 설정 해제
         loginButton.setBounds(52, 382, 250, 40);
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -40,6 +46,10 @@ public class Login extends JPanel {
                 // 로그인 체크
                 if (db.logincheck(id, password)) {
                     JOptionPane.showMessageDialog(null, "로그인 성공!");
+                    // 로그인 성공 시 리스너 호출
+                    if (loginSuccessListener != null) {
+                        loginSuccessListener.actionPerformed(e);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "로그인 실패: 잘못된 ID 또는 비밀번호입니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
@@ -61,5 +71,10 @@ public class Login extends JPanel {
     // 회원가입 버튼의 ActionListener를 설정하는 메서드
     public void setJoinButtonActionListener(ActionListener listener) {
         joinButton.addActionListener(listener);
+    }
+
+    // 로그인 성공 시 호출될 리스너 설정
+    public void setLoginSuccessActionListener(ActionListener listener) {
+        this.loginSuccessListener = listener;
     }
 }
